@@ -1,0 +1,29 @@
+[package]
+id = "qjwunuxggzlelrebszziqz2kjqycw7xr"
+name = "game"
+version = "0.0.1"
+content = { type = "Playable" }
+ambient_version = "0.3.1"
+
+[dependencies]
+base_assets = { deployment = "79plwEq1A0N3t0ExBOMTPM" }
+character_controller = { deployment = "yV6nlkxj25cmkBhd4koe8" }
+character_animation = { deployment = "4nLmHfcAlZkvWbK0NANMoC" }
+hide_cursor = { deployment = "2ejmKJKgh6b4pTnwWPdv4s" }
+
+[components]
+bouncy_created = { type = "Duration" }
+max_h = { type = "F32", name = "height_counter", description = "A count max height", attributes = ["Debuggable"] }
+will_destroyed = { type = "Bool", name = "marker", description = "This blocks will destroy ", attributes = ["Debuggable"] }
+
+[message.Paint]
+fields = { ray_origin = "Vec3", ray_dir = "Vec3" }
+
+[message.TeleportToSpawn]
+fields = {}
+
+[message.ChangeCam]
+fields = {}
+
+[message.PlayerSpawn]
+fields = {}
