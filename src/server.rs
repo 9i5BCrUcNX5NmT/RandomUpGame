@@ -3,7 +3,7 @@ use ambient_api::{
         hierarchy::components::parent,
         model::components::model_from_url,
         physics::components::{cube_collider, plane_collider},
-        player::components::{is_player, user_id},
+        player::components::user_id,
         primitives::components::{cube, quad},
         rendering::components::color,
         transform::components::{rotation, scale, translation},
@@ -11,7 +11,7 @@ use ambient_api::{
 };
 use packages::{
     character_animation::components::basic_character_animations,
-    character_controller::components::{camera_distance, use_character_controller}, this::{messages::{ChangeCam, Paint, PlayerSpawn, TeleportToSpawn}},
+    character_controller::components::{camera_distance, use_character_controller}, this::messages::{ChangeCam, Paint, PlayerSpawn, TeleportToSpawn},
 };
 
 use crate::packages::this::components::{max_h, will_destroyed};

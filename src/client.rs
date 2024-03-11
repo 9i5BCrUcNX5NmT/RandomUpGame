@@ -1,5 +1,5 @@
 use ambient_api::{
-    core::transform::components::translation, element::{use_entity_component, use_state}, prelude::*,
+    core::transform::components::translation, element::use_entity_component, prelude::*,
 };
 use packages::this::messages::{ChangeCam, Paint, PlayerSpawn, TeleportToSpawn};
 #[main]
@@ -56,8 +56,7 @@ fn ChCam(_hooks: &mut Hooks) -> Element {
 }
 
 #[element_component]
-fn PlSpawn(hooks: &mut Hooks) -> Element {
+fn PlSpawn(_hooks: &mut Hooks) -> Element {
     Button::new("Spawn", |_| PlayerSpawn.send_server_reliable())
-        .hotkey(VirtualKeyCode::Space)
         .el()
 }
