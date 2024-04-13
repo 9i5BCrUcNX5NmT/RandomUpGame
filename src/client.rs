@@ -1,5 +1,7 @@
 use ambient_api::{
-    core::transform::components::translation, element::use_entity_component, prelude::*,
+    core::transform::components::translation,
+    element::{use_entity_component, use_query, use_state, use_state_with},
+    prelude::*,
 };
 use packages::this::messages::{ChangeCam, Paint, PlayerSpawn, TeleportToSpawn};
 #[main]
@@ -24,15 +26,52 @@ pub fn main() {
 }
 
 #[element_component]
-fn App(_hooks: &mut Hooks) -> Element {
-    FlowColumn::el(
-        [FlowRow::el([Restart.el(), ChCam.el(), PlayerPosition.el()]),
-            FlowRow::el([
-                PlSpawn.el()
-            ])]
-    ).with(width(), 200.)
+fn App(hooks: &mut Hooks) -> Element {
+    FlowColumn::el([
+        FlowRow::el([Restart.el(), ChCam.el(), PlayerPosition.el()]),
+        FlowRow::el([PlSpawn.el()]),
+    ])
+    .with(width(), 200.)
     .with(space_between_items(), STREET)
-    .with_padding_even(STREET)
+    .with_padding_even(STREET);
+
+    let (screen, set_screen) = use_state(hooks, None);
+    PageScreen::el([
+        ScreenContainer(screen).el(),
+        Text::el("Начало игры"), // Play game
+        Button::new("Start", move |_| { // Spawn
+            set_screen(Some(SubScreen::el(cb({
+                let set_screen = set_screen.clone();
+                move || {
+                    set_screen(None);
+                }
+            }))))
+        })
+        .el(),
+    ])
+}
+
+#[element_component]
+fn SubScreen(hooks: &mut Hooks, on_back: Cb<dyn Fn() + Sync + Send>) -> Element {
+    let (screen, set_screen) = use_state(hooks, None);
+    // let (id, _) = use_state_with(hooks, |_| friendly_id());
+    PageScreen::el([
+        ScreenContainer(screen).el(),
+        Text::el(format!("SubScreen")),
+        Button::new("Back", move |_| on_back()).el(),
+        Button::new("Open sub screen", {
+            let set_screen = set_screen.clone();
+            move |_| {
+                set_screen(Some(SubScreen::el(cb({
+                    let set_screen = set_screen.clone();
+                    move || {
+                        set_screen(None);
+                    }
+                }))))
+            }
+        },).el(),
+        PlSpawn.el(),
+    ])
 }
 
 #[element_component]
@@ -57,6 +96,8 @@ fn ChCam(_hooks: &mut Hooks) -> Element {
 
 #[element_component]
 fn PlSpawn(_hooks: &mut Hooks) -> Element {
-    Button::new("Spawn", |_| PlayerSpawn.send_server_reliable())
-        .el()
+    Button::new("Spawn", |_| {
+        PlayerSpawn.send_server_reliable();
+    })
+    .el()
 }

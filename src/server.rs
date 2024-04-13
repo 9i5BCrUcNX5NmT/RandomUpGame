@@ -7,11 +7,14 @@ use ambient_api::{
         primitives::components::{cube, quad},
         rendering::components::color,
         transform::components::{rotation, scale, translation},
-    }, entity::despawn, prelude::*
+    },
+    entity::despawn,
+    prelude::*,
 };
 use packages::{
     character_animation::components::basic_character_animations,
-    character_controller::components::{camera_distance, use_character_controller}, this::messages::{ChangeCam, Paint, PlayerSpawn, TeleportToSpawn},
+    character_controller::components::{camera_distance, use_character_controller},
+    this::messages::{ChangeCam, Paint, PlayerSpawn, TeleportToSpawn},
 };
 
 use crate::packages::this::components::{max_h, will_destroyed};
@@ -24,24 +27,6 @@ pub async fn main() {
         .with(color(), vec4(1.0, 1.0, 1.0, 1.0))
         .with(plane_collider(), ())
         .spawn();
-
-    // spawn_query(is_player()).bind(move |players| {
-    //     for (id, _) in players {
-    //         entity::add_components(
-    //             id,
-    //             Entity::new()
-    //                 .with(use_character_controller(), ())
-    //                 .with(
-    //                     model_from_url(),
-    //                     packages::base_assets::assets::url("Y Bot.fbx"),
-    //                 )
-    //                 .with(basic_character_animations(), id)
-    //                 .with(color(), random::<Vec4>())
-    //                 .with(max_h(), 0.0)
-    //                 .with(camera_distance(), -1.0),
-    //         );
-    //     }
-    // });
 
     Paint::subscribe(|ctx, msg| {
         if ctx.client_user_id().is_none() {
@@ -76,7 +61,7 @@ pub async fn main() {
                 .with(basic_character_animations(), player_id)
                 .with(color(), random::<Vec4>())
                 .with(max_h(), 0.0)
-                .with(camera_distance(), -1.0),
+                .with(camera_distance(), 2.0),
         );
     });
 
@@ -113,7 +98,6 @@ pub async fn main() {
             .spawn();
     }
 
-    // let mut h = 0.0;
     change_query((user_id(), translation(), rotation(), color(), max_h()))
         .track_change(translation())
         .bind(move |players| {
@@ -152,4 +136,10 @@ pub async fn main() {
                 };
             }
         });
+        
+        let screens = query(is_screen()).build().evaluate();
+        println!("{}", screens.len());
+        // change_query((is_screen())).track_change(is_screen()).bind(move |screens| {
+        //     println!("{}", screens.len());
+        // });
 }
