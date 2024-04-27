@@ -6,7 +6,7 @@ publish = false
 version = "0.0.1"
 
 [dependencies]
-ambient_api = "0.3.1"
+ambient_api = { git = "https://github.com/AmbientRun/Ambient.git", rev = "a64c0d4dba45d440c9256c05826c7b6fdd38b95a" }
 
 [[bin]]
 name = "game_client"

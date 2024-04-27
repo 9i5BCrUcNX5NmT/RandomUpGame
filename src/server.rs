@@ -17,10 +17,20 @@ use packages::{
     this::messages::{ChangeCam, Paint, PlayerSpawn, TeleportToSpawn},
 };
 
-use crate::packages::this::components::{max_h, will_destroyed};
+use crate::packages::this::{components::{max_h, screen_item, will_destroyed}, messages::{DeleteItem, NewItem}};
 
 #[main]
 pub async fn main() {
+    NewItem::subscribe(|_ctx, _| {
+        Entity::new()
+            .with(screen_item(), true)
+            .spawn();
+    });
+
+    DeleteItem::subscribe(|_ctx, data| {
+        entity::despawn(data.id);
+    });
+
     Entity::new()
         .with(quad(), ())
         .with(scale(), Vec3::ONE * 10.0)

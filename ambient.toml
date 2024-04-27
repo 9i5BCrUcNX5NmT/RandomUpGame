@@ -27,3 +27,17 @@ fields = {}
 
 [message.PlayerSpawn]
 fields = {}
+
+[message.NewItem]
+description = "Add a new screen item"
+fields = {}
+
+[message.DeleteItem]
+description = "Remove screen item"
+fields = { id = "EntityId" }
+
+[components.screen_item]
+type = "Bool"
+name = "Screen item"
+description = "Item in the screen list."
+attributes = ["Networked", "Debuggable"]
